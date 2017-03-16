@@ -1,0 +1,14 @@
+o preloadedState not working
+
+- How to handle images
+  Host on Cloudinary and seed DB with urls?
+
+- General Workflow
+
+- How to keep working when you get stuck
+  - yesterday's bug
+
+- Git tips (branching/merging, reverting back to a previous state) Where the hell am i?
+
+set up errors so they get wiped when swapping forms
+  -componentWillUnmount - remove errors from state

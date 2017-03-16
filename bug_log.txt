@@ -1,0 +1,45 @@
+# To-Do Fixes
+- _session_form.css: User signup form: when attempting to sign up with a password that's too short, CSS changes upon error rendering. This becomes a bigger issue if you also sign up with an existing user's username (additional errors)
+
+
+
+####################################################################################
+1) testing window.store = configureStore(); and receiving
+    error message: "Uncaught TypeError: window.configureStore is not a function
+        at <anonymous>:1:8"
+
+    seems to be related to:
+      Warning: Failed prop type: The prop `store` is marked as required in `Provider`, but its value is `undefined`.
+        in Provider (created by Root)
+        in Root
+
+    solution: configureStore wasn't returning anything meaningful. Initial code had {} in function definition. Replaced with ()'s
+
+2) testing window.store.dispatch(login(user)) and receiving
+    error message: "window.store.getStatus()
+      VM3953:1 Uncaught TypeError: Cannot read property 'getStatus' of undefined
+      at <anonymous>:1:13
+
+    solution: Navigation to root page and adding store (entry file) and login method(inside action file) to window
+
+3) loading localhost:3000 during routes update for SessionFormContainer
+    error message: "Uncaught Error: Module build failed: SyntaxError: Expected corresponding JSX closing tag for <Router> (15:8)"
+
+    solution: Remove self-closing JSX tag from Route (closed later after nested routes. Nested routes created need for closing </Route> tag, so original self-closing tag could be made into an opening tag)
+
+4) receiving 401 errors (invalid credentials on signup and login). State looks
+    correct in React console, but server side returns errors.
+    error message: Started POST "/api/session" for ::1 at 2017-03-15 08:39:15 -0700
+    Processing by Api::SessionsController#create as JSON
+    Parameters: {"user"=>{"user"=>{"username"=>"andrew", "password"=>"[FILTERED]"}}}
+    Unpermitted parameter: user
+    User Load (0.4ms)  SELECT  "users".* FROM "users" WHERE "users"."username" IS NULL LIMIT $1  [["LIMIT", 1]]
+    Completed 401 Unauthorized in 1ms (Views: 0.1ms | ActiveRecord: 0.4ms)
+
+    solution: user was nested. Removing { } around user in api (session) call resolved issue
+
+5) after updating to clear errors on form change, currentUser not persisting.
+    Server is returning 200
+    message
+
+    During clear errors, had added dispatch(clearErrors) to signup and login actions. This was removed because SessionReducer clears errors on merge with _nullUser
